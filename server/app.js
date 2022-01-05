@@ -1,3 +1,4 @@
+const dotenv = require("dotenv")
 const colors = require("colors");
 const path = require("path");
 const http = require("http");
@@ -14,6 +15,7 @@ const userRouter = require("./routes/user");
 
 const { json, urlencoded } = express;
 
+dotenv.config()
 connectDB();
 const app = express();
 const server = http.createServer(app);
