@@ -6,8 +6,24 @@ const mongoose = require("mongoose");
 const availabilitySchema = mongoose.Schema(
     {
         data: { type: Date, required: true },
-        startTime: { type: Number, required: true,default:10 },
-        endTime: { type: Number, required: true,default:22 },
+        start: { type: Number, required: true,default:10 },
+        end: { type: Number, required: true,default:22 },
+        user: {
+            type: mongoose.Schema.Types.ObjectId,
+            required: true,
+            ref: 'User',
+        },
+    },
+    {
+        timestamps: true,
+    }
+)
+
+const reviewSchema = mongoose.Schema(
+    {
+        name: { type: String, required: true },
+        rating: { type: Number, required: true },
+        comment: { type: String, required: true },
         user: {
             type: mongoose.Schema.Types.ObjectId,
             required: true,
@@ -40,17 +56,42 @@ const profileSchema = new mongoose.Schema({
     phoneNumber: {
         type: String,
     },
-    address: {
-        address: { type: String, required: true },
-        city: { type: String, required: true },
-        postCode: { type: String, required: true },
-        country: { type: String, required: true },
-        required: true
-    },
     description: {
         type: String,
     },
-    availability:[availabilitySchema]
+    photo:{
+      type:String,
+    },
+    Gallery:[],
+    address: {
+        street: { type: String, required: true },
+        city: { type: String, required: true },
+        postCode: { type: String, required: true },
+        required: true
+    },
+    isOwner:{
+      type:Boolean,
+      required:true
+    },
+    isSitter:{
+        type:Boolean,
+        required:true,
+        default:false
+    },
+    dogSitter:{
+        availability:[availabilitySchema],
+        review:[reviewSchema],
+        rating: {
+            type: Number,
+            required: true,
+            default: 0,
+        },
+        cost:{
+            type:Number,
+            default:0
+        },
+
+    }
 });
 
 
