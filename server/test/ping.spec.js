@@ -5,28 +5,14 @@ const server = app.server
 chai.should();
 chai.use(chaiHttp);
 
-describe("/POST ping", () => {
-  it("it should return 200 and message", (done) => {
-    chai
-      .request(app)
-      .post(`/ping/`)
-      .send({ message: "hello" })
-      .end((err, res) => {
-        res.should.have.status(200);
-        res.body.should.have
-          .property("response")
-          .eql("Server is running. Message received: hello");
-        done();
-      });
-  });
-});
+console.log("test start")
 
 
 describe("/ ping", () => {
     it("it should return 200 and a string", (done) => {
         chai
             .request(server)
-            .post(`/`)
+            .get(`/`)
             .end((err, res) => {
                 res.should.have.status(200);
                 res.text.should.eql("API is running")
