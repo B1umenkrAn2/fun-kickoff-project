@@ -8,7 +8,7 @@ const asyncHandler = require("express-async-handler");
 const sitterList = asyncHandler(async (req, res, next) => {
 
     // unfinished
-    const sitters = await Profile.find({isSitter: true}).sort({ "dogSitter.rating": -1 }).limit(10)
+    const sitters = await Profile.find({isSitter: true}).sort({"dogSitter.rating": -1}).limit(10)
     res.json({success: {sitters: sitters}})
 
 });
@@ -16,15 +16,15 @@ const sitterList = asyncHandler(async (req, res, next) => {
 // @route GET /:id
 // @desc get profile by id
 // @access private protect
-const getProfileById = asyncHandler(async (req,res)=>{
-    const {id} = req.params.id
+const getProfileById = asyncHandler(async (req, res) => {
+    const {id} = req.params
 
     const profile = await Profile.findById(id)
 
-    if (profile){
+    if (profile) {
 
-        res.status(200).json({success:{profile}})
-    }else {
+        res.status(200).json({success: {profile}})
+    } else {
         res.status(404)
         throw new Error('profile not found.')
     }
@@ -35,15 +35,18 @@ const getProfileById = asyncHandler(async (req,res)=>{
 // @access private protect
 const createProfile = asyncHandler(async (req, res) => {
     // get info from body
-    const {firstName, lastName, gender, street, city, postCode} = req.body
+    const {firstName, lastName, gender, address} = req.body
     // get user from token
-    const user = req.user
+    const user = await User.findById(req.user.id)
+    console.log(user)
 
     const profile = await Profile.create({
         firstName,
         lastName,
-        address: {street, city, postCode},
-        user
+        address,
+        gender,
+        user,
+        isOwner: true
     })
 
     if (profile) {
@@ -65,30 +68,16 @@ const createProfile = asyncHandler(async (req, res) => {
 // @access private protect
 const updateProfile = asyncHandler(async (req, res) => {
 
-    const profile = await Profile.findOne(req.body._id)
+    const profile = await Profile.findOneAndUpdate(req.body._id, req.body, {
+        new: true
+    });
 
     if (profile) {
-        const {firstName, lastName, gender, street, city, postCode, description, phoneNumber, photo} = req.body
-
-        const user = req.user
-
-        profile.firstName = firstName || profile.firstName
-        profile.lastName = lastName || profile.lastName
-        profile.gender = gender || profile.gender
-        profile.address = {street, city, postCode} || profile.address
-        profile.description = description || profile.description
-        profile.phoneNumber = phoneNumber || profile.phoneNumber
-        profile.photo = photo || profile.photo
-
-        const updateProfile = profile.save()
-
         res.status(200).json({
             success: {
                 profile
             }
         })
-
-
     } else {
         res.status(404)
         throw new Error('profile not found')
@@ -147,4 +136,4 @@ const becomeSitter = asyncHandler(async (req, res) => {
     }
 
 })
-export {sitterList, createProfile, updateProfile,deleteProfile, becomeSitter,getProfileById}
+module.exports = {sitterList, createProfile, updateProfile, deleteProfile, becomeSitter, getProfileById}

@@ -6,7 +6,7 @@ const {sitterList, createProfile,updateProfile,deleteProfile,becomeSitter,getPro
 router.route("/sitterList").get(sitterList);
 router.route("/").post(protect, createProfile)
 router.route("/:id").put(protect, updateProfile)
-router.route("/:id").put(protect, getProfileById)
+router.route("/:id").get(protect, getProfileById)
 router.route("/:id").delete(protect, deleteProfile)
 router.route("/:id/sitter").post(protect,becomeSitter)
 
