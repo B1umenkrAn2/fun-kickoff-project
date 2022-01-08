@@ -1,11 +1,8 @@
 const mongoose = require("mongoose");
 
-
-
-
 const availabilitySchema = mongoose.Schema(
     {
-        data: { type: Date, required: true },
+        date: { type: Date, required: true },
         start: { type: Number, required: true,default:10 },
         end: { type: Number, required: true,default:22 },
         user: {
@@ -24,11 +21,6 @@ const reviewSchema = mongoose.Schema(
         name: { type: String, required: true },
         rating: { type: Number, required: true },
         comment: { type: String, required: true },
-        user: {
-            type: mongoose.Schema.Types.ObjectId,
-            required: true,
-            ref: 'User',
-        },
     },
     {
         timestamps: true,
@@ -62,11 +54,9 @@ const profileSchema = new mongoose.Schema({
     photo:{
       type:String,
     },
-    Gallery:[],
+    gallery:[],
     address: {
-        street: { type: String, required: true },
-        city: { type: String, required: true },
-        postCode: { type: String, required: true },
+        type: String,
         required: true
     },
     isOwner:{
